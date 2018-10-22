@@ -5,9 +5,27 @@ from django.db import models
 from cms.models import CMSPlugin
 
 
+class NonStrippingTextField(models.TextField):
+    """A TextField that does not strip whitespace at the beginning/end of
+    it's value.  Might be important for markup/code."""
+
+    def formfield(self, **kwargs):
+        kwargs['strip'] = False
+        return super().formfield(**kwargs)
+
+
+class NonStrippingCharField(models.CharField):
+    """A CharField that does not strip whitespace at the beginning/end of
+    it's value.  Might be important for markup/code."""
+
+    def formfield(self, **kwargs):
+        kwargs['strip'] = False
+        return super().formfield(**kwargs)
+
+
 @python_2_unicode_compatible
 class CMSCharFieldPlugin(CMSPlugin):
-    body = models.CharField(_('body'), max_length=500, strip=False)
+    body = NonStrippingCharField(_('body'), max_length=500)
 
     def __str__(self):
         return self.body
@@ -17,7 +35,7 @@ class CMSCharFieldPlugin(CMSPlugin):
 
 @python_2_unicode_compatible
 class CMSTextFieldPlugin(CMSPlugin):
-    body = models.TextField(_('body'), strip=False)
+    body = NonStrippingTextField(_('body'))
 
     def __str__(self):
         return self.body
