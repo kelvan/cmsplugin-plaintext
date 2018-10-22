@@ -7,7 +7,7 @@ from cms.models import CMSPlugin
 
 @python_2_unicode_compatible
 class CMSCharFieldPlugin(CMSPlugin):
-    body = models.CharField(_('body'), max_length=500)
+    body = models.CharField(_('body'), max_length=500, strip=False)
 
     def __str__(self):
         return self.body
@@ -17,9 +17,10 @@ class CMSCharFieldPlugin(CMSPlugin):
 
 @python_2_unicode_compatible
 class CMSTextFieldPlugin(CMSPlugin):
-    body = models.TextField(_('body'))
+    body = models.TextField(_('body'), strip=False)
 
     def __str__(self):
         return self.body
 
     search_fields = ('body',)
+
